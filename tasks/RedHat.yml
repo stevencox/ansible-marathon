@@ -1,7 +1,9 @@
 ---
 - name: Add mesosphere repo
+  environment: "{{proxy_env}}"
   yum: name={{ mesosphere_yum_repo }} state=present
 
 - name: Install Marathon
+  environment: "{{proxy_env}}"
   yum: name={{ marathon_yum_package }} state=present
   notify: Restart marathon
