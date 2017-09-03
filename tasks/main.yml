@@ -44,5 +44,17 @@
   - Reload systemd
   - Restart marathon
 
+- name: Check if systemd exists
+  stat: path=/lib/systemd/system/
+  register: systemd_check
+
+- name: Create Marathon systemd script
+  template: src=marathon.service.j2 dest=/lib/systemd/system/marathon.service
+  when: systemd_check.stat.exists == true
+  notify:
+    - Reload daemon
+    - Restart marathon
+
 - name: Enable Marathon service
   service: name=marathon enabled=yes
+  when: systemd_check.stat.exists == true
